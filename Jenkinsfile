@@ -22,22 +22,21 @@ pipeline {
             }
         }
 
-    stage('Test') {
-   	 steps {
-    	    bat '''
-      	    for /L %%i in (1,1,10) do (
-           	 curl.exe -f http://localhost:8081 && exit /b 0
-            	 echo Application mazal ma ready... tentative %%i/10
-            	 powershell -NoProfile -Command "Start-Sleep -Seconds 2"
-        )
+        stage('Test') {
+            steps {
+                bat '''
+                for /L %%i in (1,1,10) do (
+                    curl.exe -f http://localhost:8081 && exit /b 0
+                    echo Application mazal ma ready... tentative %%i/10
+                    powershell -NoProfile -Command "Start-Sleep -Seconds 2"
+                )
 
-        echo Application ma jawbatch ba3d 10 tentatives
-        docker ps
-        docker logs jenkins-demo-container
-        exit /b 1
-        '''
-    }
-}
+                echo Application ma jawbatch ba3d 10 tentatives
+                docker ps
+                docker logs jenkins-demo-container
+                exit /b 1
+                '''
+            }
         }
 
         stage('Finish') {
