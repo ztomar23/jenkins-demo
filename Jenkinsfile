@@ -2,22 +2,28 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout Test') {
+        stage('Checkout') {
             steps {
-                echo 'Jenkinsfile t9ra mzyan'
+                echo 'Code tclonea mn GitHub'
             }
         }
 
-        stage('Show Files') {
+        stage('Docker Build') {
             steps {
-                bat 'dir'
-                bat 'type app.txt'
+                bat 'docker build -t jenkins-demo .'
             }
         }
 
-        stage('Finish') {
+        stage('Docker Deploy') {
             steps {
-                echo 'CI pipeline daz b najah'
+                bat 'docker rm -f jenkins-demo-container || exit 0'
+                bat 'docker run -d -p 8081:80 --name jenkins-demo-container jenkins-demo'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'curl http://localhost:8081'
             }
         }
     }
