@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 echo 'Code tclonea mn GitHub'
@@ -23,7 +24,22 @@ pipeline {
 
         stage('Test') {
             steps {
-                bat 'curl http://localhost:8081'
+                bat '''
+                for /L %%i in (1,1,10) do (
+                    curl -f http://localhost:8081 && exit /b 0
+                    echo Application mazal ma ready... tentative %%i/10
+                    timeout /t 2 /nobreak >nul
+                )
+
+                echo Application ma jawbatch ba3d 10 tentatives
+                exit /b 1
+                '''
+            }
+        }
+
+        stage('Finish') {
+            steps {
+                echo 'Pipeline Docker daz b najah'
             }
         }
     }
